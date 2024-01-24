@@ -3,22 +3,23 @@
 
 
 function titleClickHandler(event){
+    let clickedElement = this; 
 
-
- /* remove class 'active' from all article links  */
+ /* [DONE] remove class 'active' from all article links  */
 
  const activeLinks = document.querySelectorAll('.titles a.active');
   for(let i = 0; activeLinks.length > i; i++) {
     activeLinks[i].classList.remove('active');
   }
 
-  /* add class 'active' to the clicked link */
-const activeArticle = document.querySelectorAll('.posts .active'); 
+  /* [in progress]add class 'active' to the clicked link */
+  clickedElement.classList.add('active');
+
+  /*  [DONE] remove class 'active' from all articles */
+  const activeArticle = document.querySelectorAll('.posts .active'); 
 for (let i = 0; activeArticle.length > i; i++) {
  activeArticle[i].classList.remove('active');
 }
-
-  /* remove class 'active' from all articles */
 
   /* get 'href' attribute from the clicked link */
 
