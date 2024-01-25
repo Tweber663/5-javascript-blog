@@ -1,12 +1,10 @@
 'use strict';
 
-
 function titleClickHandler(event){
     event.preventDefault();
     let clickedElement = this; 
 
- /* [DONE] remove class 'active' from all article links  */
-
+  /* [DONE] remove class 'active' from all article links  */
  const activeLinks = document.querySelectorAll('.titles a.active');
   for(let i = 0; activeLinks.length > i; i++) {
     activeLinks[i].classList.remove('active');
@@ -23,9 +21,11 @@ function titleClickHandler(event){
 
   /*[DONE] get 'href' attribute from the clicked link */
   const articleSelector = clickedElement.getAttribute("href")
+  console.log(articleSelector)
 
   /* [DONE] find the correct article using the selector (value of 'href' attribute) */
-  const targetArticle = document.querySelector(articleSelector)
+  const targetArticle = document.getElementById(articleSelector)
+  console.log(targetArticle)
 
   /* [DONE] add class 'active' to the correct article */
   targetArticle.classList.add('active')
@@ -62,17 +62,14 @@ function generateTitleLinks(){
     html += linkHTML;
  }
 
- titleList.innerHTML = html
+    /* Event listner activates titleClickHandler*/
+    titleList.innerHTML = html
+    const dom_title = document.querySelectorAll('.titles a');
 
-
-   
+    Array.from(dom_title).forEach((e) => {
+        e.addEventListener("click", titleClickHandler)
+ })
 }
 
 generateTitleLinks();
-
-const dom_title = document.querySelectorAll('.titles a');
-
-Array.from(dom_title).forEach((e) => {
-    e.addEventListener("click", titleClickHandler)
-})
 
