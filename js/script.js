@@ -1,5 +1,12 @@
 'use strict';
 
+
+const optArticleSelector = '.post',
+  optTitleSelector = '.post-title',
+  optTitleListSelector = '.titles',
+  optArticleUL = '.post-tags .list';
+
+
 function titleClickHandler(event){
     event.preventDefault();
     let clickedElement = this; 
@@ -25,17 +32,25 @@ function titleClickHandler(event){
 
   /* [DONE] find the correct article using the selector (value of 'href' attribute) */
   const targetArticle = document.getElementById(articleSelector)
-  console.log(targetArticle)
 
   /* [DONE] add class 'active' to the correct article */
   targetArticle.classList.add('active')
   
+  generateTags(targetArticle)
 }
 
+ const generateTags = (Article) => {
 
-const optArticleSelector = '.post',
-  optTitleSelector = '.post-title',
-  optTitleListSelector = '.titles';
+  let emptyHTML = ``
+  const tagsUL = Article.querySelector('.list'); 
+
+  const dataTags = Article.getAttribute('data-tags'); 
+  dataTags.split(" ").forEach((a) => {
+    emptyHTML += `<li><a href="">${a}</a></li>`
+  })
+
+  tagsUL.innerHTML += emptyHTML;
+}
 
 function generateTitleLinks(){
 
