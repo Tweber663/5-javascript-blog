@@ -67,7 +67,7 @@ function generateTitleLinks(){
     const dom_title = document.querySelectorAll('.titles a');
 
     Array.from(dom_title).forEach((e) => {
-        e.addEventListener("click", titleClickHandler)
+        e.addEventListener("click", titleClickHandler);
  })
 }
 

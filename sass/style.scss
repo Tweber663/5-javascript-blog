@@ -53,8 +53,7 @@ body {
 
 /* Logo */
 .logo {
-  font-family: "Sacramento", cursive;
-  font-weight: 400;
+  font-family: 'Silkscreen', sans-serif;
   font-size: 104px;
   line-height: 1;
   text-align: center;
@@ -66,6 +65,11 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.list a{
+  text-decoration: none;
+}
+
 .list .active {
   font-weight: bold;
 }
