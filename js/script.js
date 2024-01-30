@@ -4,16 +4,16 @@ function titleClickHandler(event){
     event.preventDefault();
     let clickedElement = this; 
 
-  /* [DONE] remove class 'active' from all article links  */
+  /* [DONE] removes class 'active' from all article (LI) links  */
  const activeLinks = document.querySelectorAll('.titles a.active');
   for(let i = 0; activeLinks.length > i; i++) {
     activeLinks[i].classList.remove('active');
   }
 
-  /* [DONE]add class 'active' to the clicked link */
+  /* [DONE]add class 'active' to the clicked link (LI) */
   clickedElement.classList.add('active');
 
-  /*  [DONE] remove class 'active' from all articles */
+  /*  [DONE] remove class 'active' from selected ARTICLE */
   const activeArticle = document.querySelectorAll('.posts .active'); 
     for (let i = 0; activeArticle.length > i; i++) {
     activeArticle[i].classList.remove('active');
@@ -39,12 +39,13 @@ const optArticleSelector = '.post',
 
 function generateTitleLinks(){
 
-  /* [DONE]remove contents of titleList */
+  /* [DONE] GRABS UL  */
  const titleList = document.querySelector(optTitleListSelector);
 
-  /*[DONE] for each article */
+  /*[DONE] Grabs ARTICLE */
  const articles = document.querySelectorAll(optArticleSelector);
 
+ /* Cycle by each ARTICLE */
  let html = ``;
  for (let i = 0; articles.length > i; i++) {
     const article = articles[i];
@@ -72,4 +73,5 @@ function generateTitleLinks(){
 }
 
 generateTitleLinks();
+
 
