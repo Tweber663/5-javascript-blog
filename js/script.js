@@ -28,7 +28,6 @@ function titleClickHandler(event){
 
   /*[DONE] get 'href' attribute from the clicked link */
   const articleSelector = clickedElement.getAttribute("href")
-  console.log(articleSelector)
 
   /* [DONE] find the correct article using the selector (value of 'href' attribute) */
   const targetArticle = document.getElementById(articleSelector)
@@ -36,21 +35,49 @@ function titleClickHandler(event){
   /* [DONE] add class 'active' to the correct article */
   targetArticle.classList.add('active')
   
-  generateTags(targetArticle)
+  generateTags()
 }
 
- const generateTags = (Article) => {
+const generateTags = () => {
 
-  let emptyHTML = ``
-  const tagsUL = Article.querySelector('.list'); 
+  /*[DONE] Grabs ARTICLE */
+  const articles = document.querySelectorAll('.post');
 
-  const dataTags = Article.getAttribute('data-tags'); 
-  dataTags.split(" ").forEach((a) => {
-    emptyHTML += `<li><a href="">${a}</a></li>`
-  })
+   /* START LOOP: for every article: */
+   for (let article of articles) {
+    
+     /* find tags wrapper (DOM) */
+     const tagWrapper = article.querySelector('.list');
 
-  tagsUL.innerHTML += emptyHTML;
+     /* make html variable with empty string */
+     let html = ``;
+    
+      /* get tags from data-tags attribute */
+     const articleTags = article.getAttribute('data-tags');
+  
+     /* split tags into array */
+     const articleTagsArray = articleTags.split(' ');
+
+     for (let tag of articleTagsArray) {
+     /* generate HTML of the link + add generated code to html variable */
+     let generatedCode = `<li><a href="#${tag}">${tag}</a></li>`;
+      html += generatedCode;
+     }
+     
+    /* insert HTML of all the links into the tags wrapper */
+    tagWrapper.innerHTML = html;
+     
+   }
+
 }
+
+
+ const addClickListenersToTags = () => {
+  const tagLinks = document.querySelectorAll('.optArticleUL');
+  console.log(tagLinks)
+ }
+
+
 
 function generateTitleLinks(){
 
@@ -88,5 +115,4 @@ function generateTitleLinks(){
 }
 
 generateTitleLinks();
-
 
