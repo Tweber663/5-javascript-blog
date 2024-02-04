@@ -57,14 +57,16 @@ const calculateTagsParams = (tags) => {  //Responsbile for calculating the Max &
   return tagsParams  // Returns the  calc value to calculateTagsParams() ------>------- 🟪
 }
 
-const calculateTagClass = (count, params) => {
+
+//A funtion responsbile for calculating correct class number based on incoming tag count 🎲
+const calculateTagClass = (count, params) => { //----------------🟧
   const normalisedCount = count - params.min; 
   const normaliseMax = params.max - params.min; 
 
   const precentage = normalisedCount / normaliseMax; 
 
   const classNumber = Math.floor(precentage * 4 + 1); 
-  return classNumber;
+  return classNumber;  // returns back the class number to the calculateTagClass() function               
 }
 
 
@@ -122,10 +124,8 @@ const generateTags = () => {
 
   /*Stat loop: for each tag in allTags */
   for(let tag in allTags) {  
-
-    const tagLinkHTML = calculateTagClass(allTags[tag], tagsParams);
-    console.log('taglinkHTML:', tagLinkHTML);
-
+    /*Passing as argument tag count + min/max*/
+    const tagLinkHTML = calculateTagClass(allTags[tag], tagsParams); //----------------🟧
     allTagsHTML += `<li><a class="${optCloudClassPrefix}${tagLinkHTML}" href="#tag-${tag}">${tag} <span>(${allTags[tag]})</span></a></li>`
   }
   /*add html from allTagsHTML to tagList*/ 
@@ -171,15 +171,22 @@ addClickListenersToTags();
 
 // -------------------------------------------Authors 
 
-//1.Generate author names under article title // 
+//1.Generate author names under article title & 
 
 const generateAuthors = () => {
   const articles = document.querySelectorAll('.post');
 
   Array.from(articles).forEach((article) => {  //Cycling by each article
+   //[1.
    const tagWrapper = article.querySelector('.post-author'); /* find tags wrapper (changes DOM location every cycle) */
-   const articleTags = article.getAttribute('data-author');  /* Authors tags */
-   tagWrapper.innerHTML = `<li><a href="#${articleTags}-">${articleTags}</a></li>`; /*Creates new html each cycle + pushes to HTML DOM */ 
+   const authorTag = article.getAttribute('data-author');  /* Authors tags */
+   tagWrapper.innerHTML = `<li><a href="#${authorTag}-">${authorTag}</a></li>`; /*Creates new html each cycle + pushes to HTML DOM */ 
+   //]2.
+  let allAuthors = {}  /*Here only uniqe author names / links are stored*/
+
+
+  let authorHTML = `<a href=""><span class="">${authorTag}</span></a>`
+  
  })
 }
 generateAuthors()
@@ -245,6 +252,4 @@ function generateTitleLinks(customSelector = ''){
 }
 
 generateTitleLinks();
-
-
 
