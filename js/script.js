@@ -7,7 +7,9 @@ const optArticleSelector = '.post',
   optArticleUL = '.post-tags .list',
   optTagLinks = '.post-tags .list li a', 
   optActive = 'a.active[href^="#tag-"]',
-  optLinksTag = 'a[href^="#tag-"]';
+  optLinksTag = 'a[href^="#tag-"]', 
+  optTagsListSelector = '.list.tags';
+  console.log(document.querySelectorAll(optTagsListSelector))
   
 
 
@@ -43,6 +45,9 @@ function titleClickHandler(event){
 
 const generateTags = () => {
 
+  /* allTags with an empty array */
+  let allTags = [];
+
   /*[DONE] Grabs ARTICLE */
   const articles = document.querySelectorAll('.post');
 
@@ -63,15 +68,26 @@ const generateTags = () => {
 
      for (let tag of articleTagsArray) {
      /* generate HTML of the link + add generated code to html variable */
-     let generatedCode = `<li><a href="#tag-${tag}">${tag}</a></li><br>`;
-      html += generatedCode;
+     let linkHTML = `<li><a href="#tag-${tag}">${tag}</a></li>`;
+
+     /* check if the link is NOT already in allTags */
+     if(allTags.indexOf(linkHTML) == -1){
+      console.log(allTags.indexOf(linkHTML))
+      /* [NEW] add generated code to allTags array */
+      allTags.push(linkHTML);
+    }
+      html += linkHTML;
      }
      
-    /* insert HTML of all the links into the tags wrapper */
-
     tagWrapper.innerHTML = html;
-     
    }
+
+    /* [NEW] find list of tags in right column */
+  const tagList = document.querySelector(optTagsListSelector);
+
+  /* [NEW] add html from allTags to tagList */
+  tagList.innerHTML = allTags.join(' ');
+
 }
 generateTags()
 
@@ -113,7 +129,7 @@ addClickListenersToTags();
 
 // -------------------------------------------Authors 
 
-//1.Generate Author names under article title // 
+//1.Generate author names under article title // 
 
 const generateAuthors = () => {
   const articles = document.querySelectorAll('.post');
@@ -132,7 +148,7 @@ generateAuthors()
 function authorClickHandler() {
   let clickedAuthor = this
   const tag =   clickedAuthor.children[0].innerText;
-  generateTitleLinks('[data-author="' + tag + '"]')  
+  generateTitleLinks('[data-author="' + tag + '"]')  //<- Selector
 }
 
 const addClickListenersToAuthors = () => {
@@ -189,4 +205,5 @@ function generateTitleLinks(customSelector = ''){
 }
 
 generateTitleLinks();
+
 
