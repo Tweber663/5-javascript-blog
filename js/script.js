@@ -45,8 +45,10 @@ function titleClickHandler(event){
 
 const generateTags = () => {
 
-  /* allTags with an empty array */
-  let allTags = [];
+  // Genereates tags in middle & right columns
+
+  /*Create a new varable Alltags with empty object */
+  let allTags = {};
 
   /*[DONE] Grabs ARTICLE */
   const articles = document.querySelectorAll('.post');
@@ -71,10 +73,11 @@ const generateTags = () => {
      let linkHTML = `<li><a href="#tag-${tag}">${tag}</a></li>`;
 
      /* check if the link is NOT already in allTags */
-     if(allTags.indexOf(linkHTML) == -1){
-      console.log(allTags.indexOf(linkHTML))
-      /* [NEW] add generated code to allTags array */
-      allTags.push(linkHTML);
+     if(!allTags.hasOwnProperty(tag)){
+    /* Creates a property, and adds it to allTags object*/
+      allTags[tag] = 1;
+    } else {
+      allTags[tag]++; 
     }
       html += linkHTML;
      }
@@ -85,8 +88,19 @@ const generateTags = () => {
     /* [NEW] find list of tags in right column */
   const tagList = document.querySelector(optTagsListSelector);
 
-  /* [NEW] add html from allTags to tagList */
-  tagList.innerHTML = allTags.join(' ');
+  const tagsParams = calculateTagsParams(allTags);
+  console.log(tagsParams);
+
+  /*Create va for all links HTML */
+  let allTagsHTML = ``;
+
+  /*Stat loop: for each tag in allTags */
+  for(let tag in allTags) {  
+    allTagsHTML += `<li><a href="#tag-${tag}">${tag} <span>(${allTags[tag]})</span></a></li>`
+  }
+  /*add html from allTagsHTML to tagList*/ 
+  tagList.innerHTML = allTagsHTML;
+
 
 }
 generateTags()
@@ -116,7 +130,6 @@ function tagClickHandler(event) {
 }
 
 function addClickListenersToTags(){
-  console.log("active")
   /* Event listner activates titleClickHandler*/
   const dom_title = document.querySelectorAll(optTagLinks);
   Array.from(dom_title).forEach((e) => {
@@ -168,8 +181,6 @@ addClickListenersToAuthors()
 
 function generateTitleLinks(customSelector = ''){
 
-  console.log(customSelector)
-
   /* [DONE] GRABS UL  */
  const titleList = document.querySelector(optTitleListSelector);
 
@@ -205,5 +216,6 @@ function generateTitleLinks(customSelector = ''){
 }
 
 generateTitleLinks();
+
 
 
