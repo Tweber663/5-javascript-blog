@@ -63,54 +63,25 @@ const generateTags = () => {
 
      for (let tag of articleTagsArray) {
      /* generate HTML of the link + add generated code to html variable */
-     let generatedCode = `<li><a href="#tag-${tag}">${tag}</a></li>`;
+     let generatedCode = `<li><a href="#tag-${tag}">${tag}</a></li><br>`;
       html += generatedCode;
      }
      
     /* insert HTML of all the links into the tags wrapper */
-    console.log(html)
+
     tagWrapper.innerHTML = html;
      
    }
 }
 generateTags()
 
-const generateAuthors = () => {
-
-  const articles = document.querySelectorAll('.post');
-
-  Array.from(articles).forEach((article) => {
-
-   /* make html variable with empty string */
-   let html = ``;
-  
-   /* find tags wrapper (changes DOM location every cycle) */
-   const tagWrapper = article.querySelector('.post-author');
-   console.log(tagWrapper);
-
-   /* Authors tags */
-   const articleTags = article.getAttribute('data-author');
-
-   let generatedCode = `<li><a href="#${articleTags}-">${articleTags}</a></li>`;
-    html += generatedCode;
- 
-  /* insert HTML of all the links into the tags wrapper */
-  console.log(html)
-  tagWrapper.innerHTML = html;
-   
- })
-}
-  
-generateAuthors()
-
-
-
 
 function tagClickHandler(event) {
-  event.preventDefault();       /* prevent default action for this event */
-  const clickedElement = this;  /* new const & give it the value of "this" */
-  const href = clickedElement.getAttribute('href');    /*Extracting href from selected tag */
-  const tag = href.replace('#tag-', '');                /*Extracting tag name from href value */
+  event.preventDefault();       
+
+  const clickedElement = this;                        /*new const & give it the value of "this" */
+  const href = clickedElement.getAttribute('href');   /*Extracting href from selected tag */
+  const tag = href.replace('#tag-', '');              /*Extracting tag name from href value */
 
   const tagActive = document.querySelectorAll('a.active'); /*Grabbing tag links with "active" class*/
   Array.from(tagActive).forEach((tag) => {
@@ -122,6 +93,7 @@ function tagClickHandler(event) {
     tag.classList.add('active');
   })
 
+  console.log(tag)
   /* execute function "generateTitleLinks" with article selector as argument */
   generateTitleLinks('[data-tags~="' + tag + '"]');
 
@@ -136,6 +108,45 @@ function addClickListenersToTags(){
   })
 }
 addClickListenersToTags();
+
+
+
+// -------------------------------------------Authors 
+
+//1.Generate Author names under article title // 
+
+const generateAuthors = () => {
+  const articles = document.querySelectorAll('.post');
+
+  Array.from(articles).forEach((article) => {  //Cycling by each article
+   const tagWrapper = article.querySelector('.post-author'); /* find tags wrapper (changes DOM location every cycle) */
+   const articleTags = article.getAttribute('data-author');  /* Authors tags */
+   tagWrapper.innerHTML = `<li><a href="#${articleTags}-">${articleTags}</a></li>`; /*Creates new html each cycle + pushes to HTML DOM */ 
+ })
+}
+generateAuthors()
+
+
+
+//2. Grabbing Author's tag name to use it with Attribute selector
+function authorClickHandler() {
+  let clickedAuthor = this
+  const tag =   clickedAuthor.children[0].innerText;
+  generateTitleLinks('[data-author="' + tag + '"]')  
+}
+
+const addClickListenersToAuthors = () => {
+  const authorTag = document.querySelectorAll('.post-author');
+  Array.from(authorTag).forEach((author) => {
+    author.addEventListener('click', authorClickHandler);
+    })
+  }
+
+addClickListenersToAuthors()
+
+
+
+
 
 
 
