@@ -68,11 +68,43 @@ const generateTags = () => {
      }
      
     /* insert HTML of all the links into the tags wrapper */
+    console.log(html)
     tagWrapper.innerHTML = html;
      
    }
 }
 generateTags()
+
+const generateAuthors = () => {
+
+  const articles = document.querySelectorAll('.post');
+
+  Array.from(articles).forEach((article) => {
+
+   /* make html variable with empty string */
+   let html = ``;
+  
+   /* find tags wrapper (changes DOM location every cycle) */
+   const tagWrapper = article.querySelector('.post-author');
+   console.log(tagWrapper);
+
+   /* Authors tags */
+   const articleTags = article.getAttribute('data-author');
+
+   let generatedCode = `<li><a href="#${articleTags}-">${articleTags}</a></li>`;
+    html += generatedCode;
+ 
+  /* insert HTML of all the links into the tags wrapper */
+  console.log(html)
+  tagWrapper.innerHTML = html;
+   
+ })
+}
+  
+generateAuthors()
+
+
+
 
 function tagClickHandler(event) {
   event.preventDefault();       /* prevent default action for this event */
