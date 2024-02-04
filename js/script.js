@@ -8,8 +8,9 @@ const optArticleSelector = '.post',
   optTagLinks = '.post-tags .list li a', 
   optActive = 'a.active[href^="#tag-"]',
   optLinksTag = 'a[href^="#tag-"]', 
-  optTagsListSelector = '.list.tags';
-  console.log(document.querySelectorAll(optTagsListSelector))
+  optTagsListSelector = '.list.tags', 
+  optCloudClassCount = 5,
+  optCloudClassPrefix = 'tag-size-';
   
 
 
@@ -53,8 +54,17 @@ const calculateTagsParams = (tags) => {  //Responsbile for calculating the Max &
     min: Math.min(...storage),
     max: Math.max(...storage)
   }
+  return tagsParams  // Returns the  calc value to calculateTagsParams() ------>------- 🟪
+}
 
-  return tagsParams
+const calculateTagClass = (count, params) => {
+  const normalisedCount = count - params.min; 
+  const normaliseMax = params.max - params.min; 
+
+  const precentage = normalisedCount / normaliseMax; 
+
+  const classNumber = Math.floor(precentage * 4 + 1); 
+  return classNumber;
 }
 
 
@@ -103,7 +113,8 @@ const generateTags = () => {
     /* [NEW] find list of tags in right column */
   const tagList = document.querySelector(optTagsListSelector);
 
-  const tagsParams = calculateTagsParams(allTags);
+  /* Sends the 'allTags' obeckt to external function for calculating mix / max*/ 
+  const tagsParams = calculateTagsParams(allTags); //-------------------🟪
   console.log('tafsParams:', tagsParams)
 
   /*Create va for all links HTML */
@@ -111,7 +122,11 @@ const generateTags = () => {
 
   /*Stat loop: for each tag in allTags */
   for(let tag in allTags) {  
-    allTagsHTML += `<li><a href="#tag-${tag}">${tag} <span>(${allTags[tag]})</span></a></li>`
+
+    const tagLinkHTML = calculateTagClass(allTags[tag], tagsParams);
+    console.log('taglinkHTML:', tagLinkHTML);
+
+    allTagsHTML += `<li><a class="${optCloudClassPrefix}${tagLinkHTML}" href="#tag-${tag}">${tag} <span>(${allTags[tag]})</span></a></li>`
   }
   /*add html from allTagsHTML to tagList*/ 
   tagList.innerHTML = allTagsHTML;
@@ -138,9 +153,8 @@ function tagClickHandler(event) {
     tag.classList.add('active');
   })
 
-  console.log(tag)
   /* execute function "generateTitleLinks" with article selector as argument */
-  generateTitleLinks('[data-tags~="' + tag + '"]');
+  generateTitleLinks('[data-tags~="' + tag + '"]'); //<--------🔻
 
 }
 
@@ -176,7 +190,7 @@ generateAuthors()
 function authorClickHandler() {
   let clickedAuthor = this
   const tag =   clickedAuthor.children[0].innerText;
-  generateTitleLinks('[data-author="' + tag + '"]')  //<- Selector
+  generateTitleLinks('[data-author="' + tag + '"]')  //<-------------🔻
 }
 
 const addClickListenersToAuthors = () => {
@@ -190,9 +204,9 @@ addClickListenersToAuthors()
 
 
 
-
-
-
+// Generates titleLinks in left side columns based on icoming data from:
+// authorClickHandler()🔻
+// tagClickHandler()🔻
 
 function generateTitleLinks(customSelector = ''){
 
