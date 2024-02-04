@@ -43,6 +43,21 @@ function titleClickHandler(event){
   
 }
 
+const calculateTagsParams = (tags) => {  //Responsbile for calculating the Max & Mix num of Tags 
+  let storage = [];
+  for (let tag in tags) {
+    storage.push(tags[tag]);
+   }
+   
+  const tagsParams = {
+    min: Math.min(...storage),
+    max: Math.max(...storage)
+  }
+
+  return tagsParams
+}
+
+
 const generateTags = () => {
 
   // Genereates tags in middle & right columns
@@ -89,7 +104,7 @@ const generateTags = () => {
   const tagList = document.querySelector(optTagsListSelector);
 
   const tagsParams = calculateTagsParams(allTags);
-  console.log(tagsParams);
+  console.log('tafsParams:', tagsParams)
 
   /*Create va for all links HTML */
   let allTagsHTML = ``;
