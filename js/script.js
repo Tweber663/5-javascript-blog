@@ -17,6 +17,7 @@ const
   //Tags
   optTagLinks = '.post-tags .list li a', 
   optTagsListSelector = '.list.tags',
+  optTagsListLink = '.list.tags li',
   //Counter class
   optCloudClassPrefix = 'tag-size-';
 
@@ -130,16 +131,25 @@ const generateTags = () => {
 
   /*Stat loop: for each tag in allTags */
   for(let tag in allTags) {  
-    console.log(tag);
     /*Passing as argument tag count + min/max*/
     const tagLinkHTML = calculateTagClass(allTags[tag], tagsParams); //----------------🟧
     allTagsHTML += `<li><a class="${optCloudClassPrefix}${tagLinkHTML}" href="#tag-${tag}">${tag} <span>(${allTags[tag]})</span></a></li>`;
   }
   /*add html from allTagsHTML to tagList*/ 
   tagList.innerHTML = allTagsHTML;
-  console.log(tagList);
 
+  /*targetting TAGS right column individual Li's*/
+  const tagListLi = document.querySelectorAll(optTagsListLink); 
 
+  Array.from(tagListLi).forEach((tag) => {
+    const hrefTags = tag.children[0].getAttribute('href'); 
+    const loneTag = hrefTags.replace('#tag-', '');
+
+    tag.addEventListener('click', () => {
+      generateTitleLinks('[data-tags~="' + loneTag +'"]');
+    } );
+  });
+  
 };
 generateTags();
 
