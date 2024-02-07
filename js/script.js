@@ -1,5 +1,13 @@
 'use strict';
 
+const handleTemplate = {
+  authorName: Handlebars.compile(document.querySelector('#author-link').innerHTML),
+  authorTags: Handlebars.compile(document.querySelector('#author-tags').innerHTML),
+  tagsColumns: Handlebars.compile(document.querySelector('#tags-column').innerHTML),
+  bottomTags: Handlebars.compile(document.querySelector('#bottom-tags').innerHTML),
+  articleTitles: Handlebars.compile(document.querySelector('#article-titles').innerHTML)
+}
+
  
 const
   //Active article
@@ -104,7 +112,6 @@ const generateTags = () => {
 
     for (let tag of articleTagsArray) {
       /* generate HTML of the link + add generated code to html variable */
-      let linkHTML = `<li><a href="#tag-${tag}">${tag}</a></li>`;
 
       /* check if the link is NOT already in allTags */
       if(!allTags.hasOwnProperty(tag)){
@@ -113,9 +120,9 @@ const generateTags = () => {
       } else {
         allTags[tag]++; 
       }
-      html += linkHTML;
+      html += handleTemplate.bottomTags({tag: tag}); /*Loading bottom tags ussing handlebard -> 🚲 */
     }
-     
+  
     tagWrapper.innerHTML = html;
   }
 
@@ -127,16 +134,17 @@ const generateTags = () => {
   console.log('tafsParams:', tagsParams);
 
   /*Create va for all links HTML */
-  let allTagsHTML = ``;
+  let handleTemp = ``;
 
   /*Stat loop: for each tag in allTags */
   for(let tag in allTags) {  
     /*Passing as argument tag count + min/max*/
     const tagLinkHTML = calculateTagClass(allTags[tag], tagsParams); //----------------🟧
-    allTagsHTML += `<li><a class="${optCloudClassPrefix}${tagLinkHTML}" href="#tag-${tag}">${tag} <span>(${allTags[tag]})</span></a></li>`;
+    /* Uploading tags to right column using handlebars -> 🚲*/
+    handleTemp += handleTemplate.tagsColumns({tagSize: optCloudClassPrefix, tagLink: tagLinkHTML, tag: tag, counter: allTags[tag]})
   }
   /*add html from allTagsHTML to tagList*/ 
-  tagList.innerHTML = allTagsHTML;
+  tagList.innerHTML += handleTemp
 
   /*targetting TAGS right column individual Li's*/
   const tagListLi = document.querySelectorAll(optTagsListLink); 
@@ -144,6 +152,7 @@ const generateTags = () => {
   Array.from(tagListLi).forEach((tag) => {
     const hrefTags = tag.children[0].getAttribute('href'); 
     const loneTag = hrefTags.replace('#tag-', '');
+    console.log(loneTag)
 
     tag.addEventListener('click', () => {
       generateTitleLinks('[data-tags~="' + loneTag +'"]');
@@ -189,19 +198,23 @@ addClickListenersToTags();
 
 // -------------------------------------------Authors 
 
-//1.Generate author names under article title & 
 
 const generateAuthors = () => {
   const articles = document.querySelectorAll(optArticleSelector);
   const authorsDOM = document.querySelector(optAuthorsListSelector);
-  console.log(authorsDOM);
-  let allAuthors = {};  /*Here only uniqe author names / links are stored*/
 
+
+  let allAuthors = {};  /*Here only uniqe author names / links are stored*/
   Array.from(articles).forEach((article) => {  //Cycling by each article
     //[1.
     const tagWrapper = article.querySelector(optAuthorUL); /* find tags wrapper (changes DOM location every cycle) */
     const authorTag = article.getAttribute('data-author');  /* Authors tags */
-    tagWrapper.innerHTML = `<li><a href="#${authorTag}-">${authorTag}</a></li>`; /*Creates new html each cycle + pushes to HTML DOM */ 
+   
+    //[ Loading author name undet title using handlebars --> 🚲
+    const linkHTMLData = handleTemplate.authorName({title: `${authorTag}`})
+    tagWrapper.innerHTML = linkHTMLData;
+    //] 
+
     //]2.
     if (!allAuthors.hasOwnProperty(authorTag)){
     /* Checks if tag property exists (natrually it won't during the first check, so we automatially give it 1 point) */
@@ -211,14 +224,14 @@ const generateAuthors = () => {
     }
   });
 
-  let emptyHtml = ``;
+  let handleTemp = ``;
   /*Cycling throught each property inside 'allAthors' object */
   for (let property in allAuthors) {
-  /* based on original (not duplicated) author names, creates a link a pushes into HMTL */
-    let authorHTML = `<li><a href="#tag-${property}"><span class="author-name">${property} (${allAuthors[property]})</span></a></li>`;
-    emptyHtml += authorHTML;
+  /* based on original (not duplicated) author names, creates a link a pushes into HMTL -> 🚲*/ 
+    handleTemp += handleTemplate.authorTags({property: property, counter: allAuthors[property]})
   }
-  authorsDOM.innerHTML += emptyHtml;
+  /*Using the handlebars we're uploating the authors name to the right column*/
+  authorsDOM.innerHTML += handleTemp;
 };
 generateAuthors();
 
@@ -264,13 +277,10 @@ function generateTitleLinks(customSelector = ''){
 
     /* [DONE]find the title element */
     const articleTitle = article.querySelector(optTitleSelector).innerHTML;
-
-    /* [DONE]create HTML of the link */
-    const linkHTML = `<li><a href="${articleId}"><span>${articleTitle}</span></a></li>`;
-
-    /* [DONE]Adding <HTML> to html variable */
-    html += linkHTML;
+    /*Loading title links to right column using handle Bars*/;
+    html += handleTemplate.articleTitles({articleId: articleId, articleTitle: articleTitle})
   }
+  console.log(html);
 
   /* Event listner activates titleClickHandler*/
   titleList.innerHTML = html;
@@ -282,4 +292,6 @@ function generateTitleLinks(customSelector = ''){
 }
 
 generateTitleLinks();
+
+
 
