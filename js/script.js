@@ -6,9 +6,9 @@ const handleTemplate = {
   tagsColumns: Handlebars.compile(document.querySelector('#tags-column').innerHTML),
   bottomTags: Handlebars.compile(document.querySelector('#bottom-tags').innerHTML),
   articleTitles: Handlebars.compile(document.querySelector('#article-titles').innerHTML)
-}
+};
 
- 
+
 const
   //Active article
   optActivePost = '.posts .active',
@@ -141,10 +141,10 @@ const generateTags = () => {
     /*Passing as argument tag count + min/max*/
     const tagLinkHTML = calculateTagClass(allTags[tag], tagsParams); //----------------🟧
     /* Uploading tags to right column using handlebars -> 🚲*/
-    handleTemp += handleTemplate.tagsColumns({tagSize: optCloudClassPrefix, tagLink: tagLinkHTML, tag: tag, counter: allTags[tag]})
+    handleTemp += handleTemplate.tagsColumns({tagSize: optCloudClassPrefix, tagLink: tagLinkHTML, tag: tag, counter: allTags[tag]});
   }
   /*add html from allTagsHTML to tagList*/ 
-  tagList.innerHTML += handleTemp
+  tagList.innerHTML += handleTemp;
 
   /*targetting TAGS right column individual Li's*/
   const tagListLi = document.querySelectorAll(optTagsListLink); 
@@ -152,7 +152,7 @@ const generateTags = () => {
   Array.from(tagListLi).forEach((tag) => {
     const hrefTags = tag.children[0].getAttribute('href'); 
     const loneTag = hrefTags.replace('#tag-', '');
-    console.log(loneTag)
+    console.log(loneTag);
 
     tag.addEventListener('click', () => {
       generateTitleLinks('[data-tags~="' + loneTag +'"]');
@@ -211,7 +211,7 @@ const generateAuthors = () => {
     const authorTag = article.getAttribute('data-author');  /* Authors tags */
    
     //[ Loading author name undet title using handlebars --> 🚲
-    const linkHTMLData = handleTemplate.authorName({title: `${authorTag}`})
+    const linkHTMLData = handleTemplate.authorName({title: `${authorTag}`});
     tagWrapper.innerHTML = linkHTMLData;
     //] 
 
@@ -228,7 +228,7 @@ const generateAuthors = () => {
   /*Cycling throught each property inside 'allAthors' object */
   for (let property in allAuthors) {
   /* based on original (not duplicated) author names, creates a link a pushes into HMTL -> 🚲*/ 
-    handleTemp += handleTemplate.authorTags({property: property, counter: allAuthors[property]})
+    handleTemp += handleTemplate.authorTags({property: property, counter: allAuthors[property]});
   }
   /*Using the handlebars we're uploating the authors name to the right column*/
   authorsDOM.innerHTML += handleTemp;
@@ -277,8 +277,8 @@ function generateTitleLinks(customSelector = ''){
 
     /* [DONE]find the title element */
     const articleTitle = article.querySelector(optTitleSelector).innerHTML;
-    /*Loading title links to right column using handle Bars*/;
-    html += handleTemplate.articleTitles({articleId: articleId, articleTitle: articleTitle})
+    /*Loading title links to right column using handle Bars*/
+    html += handleTemplate.articleTitles({articleId: articleId, articleTitle: articleTitle});
   }
   console.log(html);
 
